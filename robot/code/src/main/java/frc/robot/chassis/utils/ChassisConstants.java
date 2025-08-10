@@ -29,7 +29,7 @@ public class ChassisConstants {
     public static final int GYRO_ID = 14;
     public static final CANBus CAN_BUS = CANBuses.CHASSIS_CAN_BUS;
     public static final CANBus GYRO_CAN_BUS = CANBuses.ARM_CAN_BUS;
-    public static final double STEER_GEAR_RATIO = 151.0/7.0;
+    public static final double STEER_GEAR_RATIO = 12.8;
     public static final double DRIVE_GEAR_RATIO = 8.14;
     
     public static final double STEER_KP = 4.1;
@@ -111,7 +111,7 @@ public class ChassisConstants {
 
     public static final SwerveModuleConfigs FRONT_LEFT = new SwerveModuleConfigs(
         0,
-        -0.68569029575781545181333347012135,
+        -0.11811760058966904617971846592454 + Math.PI,
         0.1
 
 
@@ -119,19 +119,19 @@ public class ChassisConstants {
 
     public static final SwerveModuleConfigs FRONT_RIGHT = new SwerveModuleConfigs(
         1,
-        -3.1139780541647389558965567479405 + Math.PI,
+        -1.1857690143562387395118170438718 + Math.PI,
         0.1
     );
 
     public static final SwerveModuleConfigs BACK_LEFT = new SwerveModuleConfigs(
         2,
-        2.7795743657460270044216391356507,
+        0.72557595608779146676885519051547 - Math.PI,
         0.1
     );
 
     public static final SwerveModuleConfigs BACK_RIGHT = new SwerveModuleConfigs(
         3,
-        -0.68875649018771909001407301006343,
+        1.4035944825855406434938628854948 - Math.PI,
         0.1
     );
 }

@@ -15,11 +15,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Ultrasonic;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Path.Trajectory.FollowTrajectory;
@@ -46,19 +46,12 @@ public class RobotContainer implements Sendable {
 
   public static RobotContainer robotContainer;
   public static CommandController driverController;
-  public static CommandController operatorController;
   public static boolean isComp = DriverStation.isFMSAttached();
   private static boolean hasRemovedFromLog = false;
   public static boolean isRed;
   public static Trigger allianceTrigger;
 
   public static Chassis chassis;
-
-  public SendableChooser<AutoMode> autoChooser;
-
-  public enum AutoMode {
-    LEFT, MIDDLE, RIGHT
-  }
 
   public static Command leftAuto;
   public static Command middleAuto;
@@ -75,7 +68,6 @@ public class RobotContainer implements Sendable {
     robotContainer = this;
     new LogManager();
     driverController = new CommandController(OperatorConstants.DRIVER_CONTROLLER_PORT, ControllerType.kXbox);
-    operatorController = new CommandController(OperatorConstants.OPERATOR_CONTROLLER_PORT, ControllerType.kXbox);
     allianceTrigger = new Trigger(() -> isRed);
 
     SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
@@ -124,14 +116,14 @@ public class RobotContainer implements Sendable {
       chassis.stop();
     }, chassis).ignoringDisable(true));
 
-    operatorController.leftBumper().onTrue(new InstantCommand(() -> {
-      chassis.stop();
-    }, chassis).ignoringDisable(true));
+    // operatorController.leftBumper().onTrue(new InstantCommand(() -> {
+    //   chassis.stop();
+    // }, chassis).ignoringDisable(true));
 
-    operatorController.povDown().onTrue(new InstantCommand(chassis::stop, chassis).ignoringDisable(true));
+    // operatorController.povDown().onTrue(new InstantCommand(chassis::stop, chassis).ignoringDisable(true));
 
-    operatorController.leftSettings()
-        .onTrue(new InstantCommand(() -> chassis.setYaw(Rotation2d.kPi)).ignoringDisable(true));
+    // operatorController.leftSettings()
+    //     .onTrue(new InstantCommand(() -> chassis.setYaw(Rotation2d.kPi)).ignoringDisable(true));
   }
 
   private void configureAuto() {
@@ -190,15 +182,17 @@ public class RobotContainer implements Sendable {
     }, chassis).withName("initDisableCommand").ignoringDisable(true);
   }
 
-  PathPoint makePointX(double x) {
-    return new PathPoint(
-        new Pose2d(chassis.getPose().getTranslation().plus(new Translation2d(x, 0)), chassis.getGyroAngle()));
+  Command makePointX(double x) {
+    return new FollowTrajectory(chassis, new ArrayList<>() {
+      {
+        add(PathPoint.kZero);
+        add(new PathPoint(new Pose2d(chassis.getPose().getTranslation().plus(new Translation2d(x, 0)), chassis.getGyroAngle())));
+      }
+    }, chassis.getGyroAngle());
   }
 
-  PathPoint makePointTurn(double radAngle) {
-    return new PathPoint(
-      new Pose2d(chassis.getPose().getTranslation(), Rotation2d.fromRadians(radAngle))
-    );
+  Command makePointTurn(double radAngle) {
+    return new FollowTrajectory(chassis, new ArrayList<>() {{add(PathPoint.kZero);}}, Rotation2d.fromRadians(radAngle).plus(chassis.getGyroAngle()));
   }
 
   /**
@@ -223,12 +217,13 @@ public class RobotContainer implements Sendable {
     timer.reset();
     timer.start();
 
-    return new FollowTrajectory(chassis, new ArrayList<>() {
-      {
-        add(PathPoint.kZero);
-        /* START OF AUTO GENERETED CODE */
-        /* END OF AUTO GENERETED CODE */
-      }
-    }, Rotation2d.kZero);
+    /* START OF AUTO GENERETED CODE */
+
+        /*Auto genereted*/
+        return makePointX(1.0)
+        .andThen(makePointTurn(-90.0 * Math.PI / 180))
+        .andThen(makePointX(-1.0))
+				.andThen(makePointTurn(90.0 * Math.PI / 180))
+				.andThen(makePointX(1.0));    /* END OF AUTO GENERETED CODE */
   }
 }
