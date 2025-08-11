@@ -4,11 +4,6 @@
 
 package frc.robot;
 
-import java.util.ArrayList;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -22,10 +17,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.Path.Trajectory.FollowTrajectory;
-import frc.robot.Path.Utils.PathPoint;
 import frc.robot.chassis.commands.Drive;
 import frc.robot.chassis.subsystems.Chassis;
+import frc.robot.commands.MoveX;
+import frc.robot.commands.Turn;
 import frc.robot.utils.CommandController;
 import frc.robot.utils.CommandController.ControllerType;
 import frc.robot.utils.Elastic;
@@ -53,12 +48,11 @@ public class RobotContainer implements Sendable {
 
   public static Chassis chassis;
 
-  public static Command leftAuto;
-  public static Command middleAuto;
-  public static Command rightAuto;
   public final Timer timer = new Timer();
 
   private Trigger userButtonTrigger;
+
+  private final SequentialCommandGroup auto;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -82,6 +76,20 @@ public class RobotContainer implements Sendable {
 
     allianceTrigger.onChange(new InstantCommand(() -> {
     }).ignoringDisable(true));
+
+    Command[] commands = {
+      /* START OF AUTO GENERETED CODE */
+      /* END OF AUTO GENERETED CODE */
+    };
+    auto = new SequentialCommandGroup(
+      commands
+    );
+    SmartDashboard.putData(auto);
+    String[] commandNameArr = new String[commands.length];
+    for (int i = 0; i < commands.length; i++) {
+      commandNameArr[i] = commands[i].getName();
+    }
+    SmartDashboard.putStringArray("Commands", commandNameArr);
   }
 
   /**
@@ -117,13 +125,15 @@ public class RobotContainer implements Sendable {
     }, chassis).ignoringDisable(true));
 
     // operatorController.leftBumper().onTrue(new InstantCommand(() -> {
-    //   chassis.stop();
+    // chassis.stop();
     // }, chassis).ignoringDisable(true));
 
-    // operatorController.povDown().onTrue(new InstantCommand(chassis::stop, chassis).ignoringDisable(true));
+    // operatorController.povDown().onTrue(new InstantCommand(chassis::stop,
+    // chassis).ignoringDisable(true));
 
     // operatorController.leftSettings()
-    //     .onTrue(new InstantCommand(() -> chassis.setYaw(Rotation2d.kPi)).ignoringDisable(true));
+    // .onTrue(new InstantCommand(() ->
+    // chassis.setYaw(Rotation2d.kPi)).ignoringDisable(true));
   }
 
   private void configureAuto() {
@@ -182,45 +192,15 @@ public class RobotContainer implements Sendable {
     }, chassis).withName("initDisableCommand").ignoringDisable(true);
   }
 
-  Command makePointX(double x) {
-    return new FollowTrajectory(chassis, new ArrayList<>() {
-      {
-        add(PathPoint.kZero);
-        add(new PathPoint(new Pose2d(chassis.getPose().getTranslation().plus(new Translation2d(x, 0)), chassis.getGyroAngle())));
-      }
-    }, chassis.getGyroAngle());
-  }
-
-  Command makePointTurn(double radAngle) {
-    return new FollowTrajectory(chassis, new ArrayList<>() {{
-      add(PathPoint.kZero);
-      add(new PathPoint(new Pose2d(chassis.getPose().getTranslation(), chassis.getGyroAngle().plus(Rotation2d.fromRadians(radAngle)))));
-    }}, Rotation2d.fromRadians(radAngle).plus(chassis.getGyroAngle()));
-  }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
-   *         {@code
-   *  public Command getAutonomousCommand() {
-   *    timer.reset();
-   *    timer.start();
-   * 
-   *    return new FollowTrajectory(chassis, new ArrayList<>() {
-   *      {
-   *        add(PathPoint.kZero);
-            add(makePointX(1));
-            add(makePointTurn(Math.PI / 2))
-   *         }
-   *         }, Rotation2d.kZero);
-   *         }
    */
   public Command getAutonomousCommand() {
     timer.reset();
     timer.start();
 
-    /* START OF AUTO GENERETED CODE */
-    /* END OF AUTO GENERETED CODE */
+    return auto;
   }
 }
