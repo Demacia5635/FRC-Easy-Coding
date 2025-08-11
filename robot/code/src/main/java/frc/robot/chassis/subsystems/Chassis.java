@@ -22,6 +22,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -78,7 +79,7 @@ public class Chassis extends SubsystemBase {
         // LogManager.addEntry("Chassis/vY", () -> getChassisSpeedsRobotRel().vyMetersPerSecond);
         SmartDashboard.putData("Chassis/set coast", new InstantCommand(() -> setNeutralMode(false)).ignoringDisable(true));
         SmartDashboard.putData("Chassis/set brake", new InstantCommand(() -> setNeutralMode(true)).ignoringDisable(true));
-        // SmartDashboard.putData(getName() + "/Swerve Drive", getChassisWidget());
+        SmartDashboard.putData(getName() + "/Swerve Drive", getChassisWidget());
         // SmartDashboard.putData("Chassis", this);
     }
 
@@ -88,28 +89,28 @@ public class Chassis extends SubsystemBase {
         }
     }
 
-    // private Sendable getChassisWidget() {
-    //     return new Sendable() {
-    //         @Override
-    //         public void initSendable(SendableBuilder builder) {
-    //             builder.setSmartDashboardType("SwerveDrive");
+    private Sendable getChassisWidget() {
+        return new Sendable() {
+            @Override
+            public void initSendable(SendableBuilder builder) {
+                builder.setSmartDashboardType("SwerveDrive");
 
-    //             builder.addDoubleProperty("Front Left Angle", () -> modules[0].getAbsoluteAngle(), null);
-    //             builder.addDoubleProperty("Front Left Velocity", () -> modules[0].getDriveVel(), null);
+                builder.addDoubleProperty("Front Left Angle", () -> modules[0].getAbsoluteAngle(), null);
+                builder.addDoubleProperty("Front Left Velocity", () -> modules[0].getDriveVel(), null);
 
-    //             builder.addDoubleProperty("Front Right Angle", () -> modules[1].getAbsoluteAngle(), null);
-    //             builder.addDoubleProperty("Front Right Velocity", () -> modules[1].getDriveVel(), null);
+                builder.addDoubleProperty("Front Right Angle", () -> modules[1].getAbsoluteAngle(), null);
+                builder.addDoubleProperty("Front Right Velocity", () -> modules[1].getDriveVel(), null);
 
-    //             builder.addDoubleProperty("Back Left Angle", () -> modules[2].getAbsoluteAngle(), null);
-    //             builder.addDoubleProperty("Back Left Velocity", () -> modules[2].getDriveVel(), null);
+                builder.addDoubleProperty("Back Left Angle", () -> modules[2].getAbsoluteAngle(), null);
+                builder.addDoubleProperty("Back Left Velocity", () -> modules[2].getDriveVel(), null);
 
-    //             builder.addDoubleProperty("Back Right Angle", () -> modules[3].getAbsoluteAngle(), null);
-    //             builder.addDoubleProperty("Back Right Velocity", () -> modules[3].getDriveVel(), null);
+                builder.addDoubleProperty("Back Right Angle", () -> modules[3].getAbsoluteAngle(), null);
+                builder.addDoubleProperty("Back Right Velocity", () -> modules[3].getDriveVel(), null);
 
-    //             builder.addDoubleProperty("Robot Angle", () -> getGyroAngle().getRadians(), null);
-    //         }
-    //     };
-    // }
+                builder.addDoubleProperty("Robot Angle", () -> getGyroAngle().getRadians(), null);
+            }
+        };
+    }
 
     public void setNeutralMode(boolean isBrake) {
         for (SwerveModule module : modules) {

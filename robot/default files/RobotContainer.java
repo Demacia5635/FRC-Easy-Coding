@@ -85,11 +85,9 @@ public class RobotContainer implements Sendable {
       commands
     );
     SmartDashboard.putData(auto);
-    String[] commandNameArr = new String[commands.length];
     for (int i = 0; i < commands.length; i++) {
-      commandNameArr[i] = commands[i].getName();
+      SmartDashboard.putString("Commands/"+i, commands[i].getName());
     }
-    SmartDashboard.putStringArray("Commands", commandNameArr);
   }
 
   /**
