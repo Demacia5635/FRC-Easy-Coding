@@ -95,16 +95,16 @@ public class Chassis extends SubsystemBase {
             public void initSendable(SendableBuilder builder) {
                 builder.setSmartDashboardType("SwerveDrive");
 
-                builder.addDoubleProperty("Front Left Angle", () -> modules[0].getAbsoluteAngle(), null);
+                builder.addDoubleProperty("Front Left Angle", () -> modules[0].getAngle(), null);
                 builder.addDoubleProperty("Front Left Velocity", () -> modules[0].getDriveVel(), null);
 
-                builder.addDoubleProperty("Front Right Angle", () -> modules[1].getAbsoluteAngle(), null);
+                builder.addDoubleProperty("Front Right Angle", () -> modules[1].getAngle(), null);
                 builder.addDoubleProperty("Front Right Velocity", () -> modules[1].getDriveVel(), null);
 
-                builder.addDoubleProperty("Back Left Angle", () -> modules[2].getAbsoluteAngle(), null);
+                builder.addDoubleProperty("Back Left Angle", () -> modules[2].getAngle(), null);
                 builder.addDoubleProperty("Back Left Velocity", () -> modules[2].getDriveVel(), null);
 
-                builder.addDoubleProperty("Back Right Angle", () -> modules[3].getAbsoluteAngle(), null);
+                builder.addDoubleProperty("Back Right Angle", () -> modules[3].getAngle(), null);
                 builder.addDoubleProperty("Back Right Velocity", () -> modules[3].getDriveVel(), null);
 
                 builder.addDoubleProperty("Robot Angle", () -> getGyroAngle().getRadians(), null);

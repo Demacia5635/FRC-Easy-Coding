@@ -74,6 +74,8 @@ public class RobotContainer implements Sendable {
     configureBindings();
     configureAuto();
 
+    SmartDashboard.putData("Check Electronics", new InstantCommand(() -> {chassis.checkElectronics();}).ignoringDisable(true));
+
     allianceTrigger.onChange(new InstantCommand(() -> {
     }).ignoringDisable(true));
 

@@ -33,12 +33,12 @@ public class Turn extends Command {
 
     @Override
     public void execute() {
-        chassis.setVelocities(new ChassisSpeeds(0, 0, angle > 0 ? Math.PI / 4 : -Math.PI / 4));
+        chassis.setVelocities(new ChassisSpeeds(0, 0, angle < 0 ? Math.PI / 4 : -Math.PI / 4));
     }
 
     @Override
     public boolean isFinished() {
-        return Math.abs(wantedAngle - chassis.getGyroAngle().getRadians()) <= Math.PI / 25 || timer.hasElapsed(2);
+        return Math.abs(wantedAngle - MathUtil.angleModulus(chassis.getGyroAngle().getRadians())) <= (Math.PI / 25) || timer.hasElapsed(2.4 * Math.abs(angle) / (Math.PI / 2));
     }
 
     @Override

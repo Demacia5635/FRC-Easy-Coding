@@ -32,12 +32,12 @@ public class MoveX extends Command {
 
     @Override
     public void execute() {
-        chassis.setVelocities(new ChassisSpeeds(dis > 0 ? 0.25 : -0.25, 0, 0));
+        chassis.setRobotRelVelocities(new ChassisSpeeds(dis < 0 ? 0.4 : -0.4, 0, 0));
     }
 
     @Override
     public boolean isFinished() {
-        return Math.abs(wantedX - chassis.getPose().getX()) <= 0.15 || timer.hasElapsed(2);
+        return timer.hasElapsed(1.8 * Math.abs(dis));
     }
 
     @Override

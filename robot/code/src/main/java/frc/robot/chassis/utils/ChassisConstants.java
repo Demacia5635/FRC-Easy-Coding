@@ -9,8 +9,8 @@ import frc.robot.utils.TalonConfig;
 
 public class ChassisConstants {
     public static final double CYCLE_DT = 0.02;
-    public static final double MAX_DRIVE_VELOCITY = 3.6;
-    public static final double MAX_ROTATIONAL_VELOCITY = Math.toRadians(360);
+    public static final double MAX_DRIVE_VELOCITY = 1;
+    public static final double MAX_ROTATIONAL_VELOCITY = Math.toRadians(180);
     public static final double MIN_DRIVE_VELOCITY_FOR_ROTATION = 0.2;
 
 
@@ -92,18 +92,18 @@ public class ChassisConstants {
                 .withPID(STEER_KP, STEER_KI, STEER_KD, STEER_KS, STEER_KV, STEER_KA, 0)
                 .withMotionMagic(MOTION_MAGIC_VEL, MOTION_MAGIC_ACCEL, MOTION_MAGIC_JERK)
                 .withBrake(true)
+                .withInvert(true)
                 .withMotorRatio(STEER_GEAR_RATIO).withRadiansMotor()
                 .withRampTime(RAMP_TIME_STEER);
-            DRIVE_CONFIG = new TalonConfig(swerveId * 3 + 
-            1, CAN_BUS, NAME + " Drive")
+            DRIVE_CONFIG = new TalonConfig(swerveId * 3 + 1, CAN_BUS, NAME + " Drive")
                 .withPID(DRIVE_KP, DRIVE_KI, DRIVE_KD, DRIVE_KS, DRIVE_KV, DRIVE_KA, 0)
                 .withBrake(true)
-                .withInvert(true)
+                .withInvert(false)
                 .withMotorRatio(DRIVE_GEAR_RATIO).withMeterMotor(wheelDiameter * Math.PI);
             CANCODER_CONFIG = new CancoderConfig(swerveId * 3 + 3, CAN_BUS, NAME + " Cancoder");
             POSITION = new Translation2d(
-                swerveId == 0 || swerveId == 1 ? 0.34 : -0.34,
-                swerveId == 0 || swerveId == 2 ? 0.29 : -0.29
+                swerveId == 0 || swerveId == 1 ? 0.315 : -0.315,
+                swerveId == 0 || swerveId == 2 ? 0.265 : -0.265
             );
             STEER_OFFSET = steerOffset;
         }
@@ -111,7 +111,7 @@ public class ChassisConstants {
 
     public static final SwerveModuleConfigs FRONT_LEFT = new SwerveModuleConfigs(
         0,
-        -0.11811760058966904617971846592454 + Math.PI,
+        3.041884785950160380660316007581,
         0.1
 
 
@@ -119,19 +119,19 @@ public class ChassisConstants {
 
     public static final SwerveModuleConfigs FRONT_RIGHT = new SwerveModuleConfigs(
         1,
-        -1.1857690143562387395118170438718 + Math.PI,
+        1.9834382386586087815169129747467,
         0.1
     );
 
     public static final SwerveModuleConfigs BACK_LEFT = new SwerveModuleConfigs(
         2,
-        0.72557595608779146676885519051547 - Math.PI,
+        -2.3884083812622546687141784827118,
         0.1
     );
 
     public static final SwerveModuleConfigs BACK_RIGHT = new SwerveModuleConfigs(
         3,
-        1.4035944825855406434938628854948 - Math.PI,
+        -1.7456699402643188700571062729266,
         0.1
     );
 }

@@ -21,10 +21,10 @@ public class SwerveModule {
         cancoder = new Cancoder(configs.CANCODER_CONFIG);
         name = configs.NAME;
 
-        steerMotor.setPosition(getAbsoluteAngle() - configs.STEER_OFFSET);
+        steerMotor.setPosition(getCanCoderAngle() - configs.STEER_OFFSET);
         
-        // SmartDashboard.putData(configs.DRIVE_CONFIG.name, driveMotor);
-        // SmartDashboard.putData(configs.STEER_CONFIG.name, steerMotor);
+        SmartDashboard.putData(configs.DRIVE_CONFIG.name, driveMotor);
+        SmartDashboard.putData(configs.STEER_CONFIG.name, steerMotor);
     }
 
     public void checkElectronics() {
@@ -42,8 +42,12 @@ public class SwerveModule {
         steerMotor.set(power);
     }
 
-    public double getAbsoluteAngle() {
+    public double getCanCoderAngle() {
         return cancoder.getCurrentAbsPosition();
+    }
+
+    public double getAngle() {
+        return MathUtil.angleModulus(getSteerAngle());
     }
 
     public void setDrivePower(double power) {
@@ -73,7 +77,7 @@ public class SwerveModule {
         return steerMotor.getCurrentVelocity();
     }
     public double getSteerAccel() {
-        return steerMotor.getAcceleration().getValueAsDouble();
+        return steerMotor.getCurrentAcceleration();
     }
 
     public double getDriveVel() {
